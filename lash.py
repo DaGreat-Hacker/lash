@@ -1,5 +1,4 @@
 
-
 LASH_MAP = {
     "A": "\\",
     "B": "\\[",
@@ -29,38 +28,42 @@ LASH_MAP = {
     "Z": "|\\|",
 }
 
-
+# Reverse mapping
 REVERSE_MAP = {v: k for k, v in LASH_MAP.items()}
 
 def encode(text):
+    """Encode text into Lash v2.1 with { between letters, _ between words"""
     words = text.upper().split(" ")
     encoded_words = []
     for word in words:
-        encoded_letters = []
+        letters = []
         for ch in word:
             if ch.isalpha():
-                encoded_letters.append(LASH_MAP[ch])
+                letters.append(LASH_MAP[ch])
             elif ch.isdigit():
-                encoded_letters.append(ch)
-        encoded_words.append("{".join(encoded_letters))
+                letters.append(ch)
+        encoded_words.append("{".join(letters))
     return "_".join(encoded_words)
 
 def decode(text):
-    parts = text.split("{")
-    result = []
-    for p in parts:
-        if p == "_":
-            result.append(" ")
-        elif p.isdigit():
-            result.append(p)
-        elif p in REVERSE_MAP:
-            result.append(REVERSE_MAP[p])
-        else:
-            result.append("?")  # unknown symbol
-    return "".join(result)
+    """Decode Lash v2.1 message into English"""
+    words = text.split("_")
+    decoded_words = []
+    for word in words:
+        letters = word.split("{")
+        decoded_letters = []
+        for token in letters:
+            if token in REVERSE_MAP:
+                decoded_letters.append(REVERSE_MAP[token])
+            elif token.isdigit():
+                decoded_letters.append(token)
+            else:
+                decoded_letters.append("?")  # unknown token
+        decoded_words.append("".join(decoded_letters))
+    return " ".join(decoded_words)
 
 def main():
-    print("Lash v2.1 Translator")
+    print("Lash v2.1 Translator (Clean Version)")
     print("1) Encode")
     print("2) Decode")
     choice = input("> ").strip()

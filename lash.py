@@ -1,30 +1,32 @@
+
+
 LASH_MAP = {
-    "A": "\\",
-    "B": "\\[",
+    "A": "\",
+    "B": "\[",
     "C": "[/",
     "D": "|[",
     "E": "|",
     "F": "/[",
-    "G": "|\\",
+    "G": "|\",
     "H": "[|",
     "I": "/",
-    "J": "/|\\",
-    "K": "\\|/",
+    "J": "/|\",
+    "K": "\|/",
     "L": "/[/",
-    "M": "/\\|",
+    "M": "/\|",
     "N": "/|/",
     "O": "[",
-    "P": "\\[|",
-    "Q": "|\\/",
-    "R": "\\|\\",
+    "P": "\[|",
+    "Q": "|\/",
+    "R": "\|\",
     "S": "[[|",
-    "T": "|\\[",
-    "U": "\\/",
-    "V": "\\||",
-    "W": "||\\",
+    "T": "|\[",
+    "U": "\/",
+    "V": "\||",
+    "W": "||\",
     "X": "||[",
     "Y": "[|[",
-    "Z": "|\\|",
+    "Z": "|\|",
 }
 
 REVERSE_MAP = {v: k for k, v in LASH_MAP.items()}
@@ -37,23 +39,25 @@ def encode(text):
         elif ch.isdigit():
             output.append(ch)
         elif ch == " ":
-            continue  # spaces handled by user if needed
+            output.append("_")  # word separator for v2.1
     return "{".join(output)
 
 def decode(text):
     parts = text.split("{")
     result = []
     for p in parts:
-        if p.isdigit():
+        if p == "_":
+            result.append(" ")
+        elif p.isdigit():
             result.append(p)
         elif p in REVERSE_MAP:
             result.append(REVERSE_MAP[p])
         else:
-            result.append("?")
+            result.append("?")  # unknown symbol
     return "".join(result)
 
 def main():
-    print("Lash v2 Translator")
+    print("Lash v2.1 Translator")
     print("1) Encode")
     print("2) Decode")
     choice = input("> ").strip()

@@ -33,15 +33,17 @@ LASH_MAP = {
 REVERSE_MAP = {v: k for k, v in LASH_MAP.items()}
 
 def encode(text):
-    output = []
-    for ch in text.upper():
-        if ch.isalpha():
-            output.append(LASH_MAP[ch])
-        elif ch.isdigit():
-            output.append(ch)
-        elif ch == " ":
-            output.append("_")  # word separator for v2.1
-    return "{".join(output)
+    words = text.upper().split(" ")
+    encoded_words = []
+    for word in words:
+        encoded_letters = []
+        for ch in word:
+            if ch.isalpha():
+                encoded_letters.append(LASH_MAP[ch])
+            elif ch.isdigit():
+                encoded_letters.append(ch)
+        encoded_words.append("{".join(encoded_letters))
+    return "_".join(encoded_words)
 
 def decode(text):
     parts = text.split("{")
